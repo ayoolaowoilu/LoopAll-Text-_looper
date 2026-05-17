@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="LoopAll  - Text Looper">
+    
+    <!-- Open Graph / WhatsApp Preview -->
+    <meta property="og:title" content="LoopAll - Text Looper">
     <meta property="og:description" content="Loop All — A minimalist text generator that loops your ideas into infinite variations. Type once, watch it multiply into endless creative outputs.">
     <meta property="og:image" content="https://loopall-textlooper.netlify.app/logo.jpg">
-      <!-- Required: The canonical URL of the page -->
-  <meta property="og:url" content="https://loopall-textlooper.netlify.app">
-  
-  <!-- Recommended: Content type -->
-  <meta property="og:type" content="website">
-  
-  <!-- Recommended: Your site/brand name -->
-  <meta property="og:site_name" content="LoopAll">
-  
-  <!-- Recommended: Image dimensions for faster rendering -->
-  <meta property="og:image:width" content="1200">
-  <meta name="google-adsense-account" content="ca-pub-2455632538490780">
-  <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://loopall-textlooper.netlify.app">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LoopAll">
+    
+    <!-- SEO & Analytics -->
+    <meta name="google-adsense-account" content="ca-pub-2455632538490780">
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
-    <title>loopAll - Text Looper</title>
+    
+    <title>LoopAll - Text Looper</title>
     
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -39,6 +41,7 @@
             flex-direction: column;
         }
 
+        /* ===== LAYOUT ===== */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -47,6 +50,7 @@
             flex: 1;
         }
 
+        /* ===== HEADER ===== */
         header {
             text-align: center;
             margin-bottom: 3rem;
@@ -69,6 +73,7 @@
             font-size: 1rem;
         }
 
+        /* ===== INPUT SECTION ===== */
         .input-section {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -123,14 +128,16 @@
             gap: 1rem;
         }
 
-        @media (max-width: 640px) {
-            .row {
-                grid-template-columns: 1fr;
-            }
+        /* ===== BUTTONS ===== */
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .btn {
-            width: 100%;
+            flex: 1;
+            min-width: 140px;
             padding: 1rem;
             background-color: #2563eb;
             color: white;
@@ -154,13 +161,20 @@
         .btn-secondary {
             background-color: #ffffff;
             color: #2563eb;
-            border: 1px solid #2563eb;
+            border: 2px solid #2563eb;
         }
 
         .btn-secondary:hover {
             background-color: #eff6ff;
         }
 
+        .btn-secondary.active {
+            background-color: #1e293b;
+            color: #ffffff;
+            border-color: #1e293b;
+        }
+
+        /* ===== OUTPUT SECTION ===== */
         .output-section {
             display: none;
             background: #ffffff;
@@ -210,6 +224,7 @@
             color: #334155;
             max-height: 400px;
             overflow-y: auto;
+            white-space: pre-wrap;
         }
 
         .remaining-box {
@@ -241,6 +256,7 @@
             height: 18px;
         }
 
+        /* ===== TOAST NOTIFICATION ===== */
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -262,6 +278,7 @@
             opacity: 1;
         }
 
+        /* ===== FOOTER ===== */
         footer {
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
@@ -312,7 +329,20 @@
             height: 20px;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 640px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
             .logo {
                 font-size: 2rem;
             }
@@ -328,15 +358,21 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
+
 <body>
 
+    <!-- ===== MAIN CONTAINER ===== -->
     <div class="container">
+
+        <!-- Header -->
         <header>
             <h1 class="logo">loop<span>All</span></h1>
             <p class="subtitle">Repeat text effortlessly</p>
         </header>
 
+        <!-- Input Section -->
         <section class="input-section">
             <div class="row">
                 <div class="form-group">
@@ -348,9 +384,14 @@
                     <input type="number" id="loopCount" min="1" max="10000" value="10" placeholder="e.g. 50">
                 </div>
             </div>
-            <button class="btn" onclick="generateLoop()">Generate Loop</button>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="generateLoop()">Generate Loop</button>
+                <button class="btn btn-secondary" id="modeBtn" onclick="toggleMode()">Mode: Spaced</button>
+            </div>
         </section>
 
+        <!-- Output Section -->
         <section class="output-section" id="outputSection">
             <div class="output-header">
                 <h2 class="output-title">Result</h2>
@@ -370,13 +411,16 @@
                 Copy All Text
             </button>
         </section>
+
     </div>
 
+    <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p class="footer-text"> Built with care by white💖</p>
+            <p class="footer-text">Built with care by white💖</p>
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/ayoola-khaleed-owoilu-86317a340" target="_blank" rel="noopener noreferrer">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -394,8 +438,10 @@
         </div>
     </footer>
 
+    <!-- ===== JAVASCRIPT ===== -->
     <script>
         let fullText = '';
+        let perLine = false;
 
         function generateLoop() {
             const word = document.getElementById('wordInput').value.trim();
@@ -411,14 +457,13 @@
                 return;
             }
 
-            // Generate full text
+            const separator = perLine ? '\n' : ' ';
             const repeated = Array(count).fill(word);
-            fullText = repeated.join(' ');
+            fullText = repeated.join(separator);
 
-            // Display logic: max 20 shown
             const displayLimit = 20;
             const displayArray = repeated.slice(0, displayLimit);
-            const displayText = displayArray.join(' ');
+            const displayText = displayArray.join(separator);
             const remaining = count - displayLimit;
 
             document.getElementById('textDisplay').textContent = displayText;
@@ -435,6 +480,17 @@
             document.getElementById('outputSection').classList.add('active');
         }
 
+        function toggleMode() {
+            perLine = !perLine;
+            const btn = document.getElementById('modeBtn');
+            btn.textContent = perLine ? 'Mode: Per Line' : 'Mode: Spaced';
+            btn.classList.toggle('active', perLine);
+            
+            if (document.getElementById('outputSection').classList.contains('active')) {
+                generateLoop();
+            }
+        }
+
         async function copyText() {
             if (!fullText) return;
 
@@ -442,7 +498,6 @@
                 await navigator.clipboard.writeText(fullText);
                 showToast('Copied to clipboard!');
             } catch (err) {
-                // Fallback
                 const textarea = document.createElement('textarea');
                 textarea.value = fullText;
                 textarea.style.position = 'fixed';
@@ -464,10 +519,10 @@
             }, 2500);
         }
 
-        // Allow Enter key to generate
         document.getElementById('wordInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') generateLoop();
         });
+        
         document.getElementById('loopCount').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') generateLoop();
         });
