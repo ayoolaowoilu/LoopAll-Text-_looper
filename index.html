@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="LoopAll  - Text Looper">
+    <meta property="og:description" content="Loop All — A minimalist text generator that loops your ideas into infinite variations. Type once, watch it multiply into endless creative outputs.">
+    <meta property="og:image" content="/logo.jpg">
+      <!-- Required: The canonical URL of the page -->
+  <meta property="og:url" content="https://loopall.netlify.app">
+  
+  <!-- Recommended: Content type -->
+  <meta property="og:type" content="website">
+  
+  <!-- Recommended: Your site/brand name -->
+  <meta property="og:site_name" content="LoopAll">
+  
+  <!-- Recommended: Image dimensions for faster rendering -->
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+    <link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
+    <title>loopAll - Text Looper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .input-section {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #334155;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #1e293b;
+            background-color: #fafafa;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        .btn-secondary:hover {
+            background-color: #eff6ff;
+        }
+
+        .output-section {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .output-section.active {
+            display: block;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .output-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .count-badge {
+            background-color: #eff6ff;
+            color: #2563eb;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .text-display {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            word-break: break-word;
+            color: #334155;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .remaining-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .remaining-box strong {
+            color: #2563eb;
+        }
+
+        .copy-btn {
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .copy-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #0f172a;
+            color: white;
+            padding: 0.875rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 2rem 1.5rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-text {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: #64748b;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .social-links a:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+
+        .social-links svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .input-section,
+            .output-section {
+                padding: 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1 class="logo">loop<span>All</span></h1>
+            <p class="subtitle">Repeat text effortlessly</p>
+        </header>
+
+        <section class="input-section">
+            <div class="row">
+                <div class="form-group">
+                    <label for="wordInput">Text to loop</label>
+                    <input type="text" id="wordInput" placeholder="Enter your text here..." autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="loopCount">Times to loop</label>
+                    <input type="number" id="loopCount" min="1" max="10000" value="10" placeholder="e.g. 50">
+                </div>
+            </div>
+            <button class="btn" onclick="generateLoop()">Generate Loop</button>
+        </section>
+
+        <section class="output-section" id="outputSection">
+            <div class="output-header">
+                <h2 class="output-title">Result</h2>
+                <span class="count-badge" id="countBadge">0 copies</span>
+            </div>
+            
+            <div class="text-display" id="textDisplay"></div>
+            
+            <div class="remaining-box" id="remainingBox" style="display: none;">
+                + <strong id="remainingCount">0</strong> more copies not shown
+            </div>
+
+            <button class="btn btn-secondary copy-btn" id="copyBtn" onclick="copyText()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                Copy All Text
+            </button>
+        </section>
+    </div>
+
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text"> Built with care by white💖</p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/ayoola-khaleed-owoilu-86317a340" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/ayoolaowoilu" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let fullText = '';
+
+        function generateLoop() {
+            const word = document.getElementById('wordInput').value.trim();
+            const count = parseInt(document.getElementById('loopCount').value);
+
+            if (!word) {
+                showToast('Please enter some text first');
+                return;
+            }
+
+            if (!count || count < 1) {
+                showToast('Please enter a valid number');
+                return;
+            }
+
+            // Generate full text
+            const repeated = Array(count).fill(word);
+            fullText = repeated.join(' ');
+
+            // Display logic: max 20 shown
+            const displayLimit = 20;
+            const displayArray = repeated.slice(0, displayLimit);
+            const displayText = displayArray.join(' ');
+            const remaining = count - displayLimit;
+
+            document.getElementById('textDisplay').textContent = displayText;
+            document.getElementById('countBadge').textContent = `${count} copies`;
+            
+            const remainingBox = document.getElementById('remainingBox');
+            if (remaining > 0) {
+                document.getElementById('remainingCount').textContent = remaining;
+                remainingBox.style.display = 'block';
+            } else {
+                remainingBox.style.display = 'none';
+            }
+
+            document.getElementById('outputSection').classList.add('active');
+        }
+
+        async function copyText() {
+            if (!fullText) return;
+
+            try {
+                await navigator.clipboard.writeText(fullText);
+                showToast('Copied to clipboard!');
+            } catch (err) {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = fullText;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied to clipboard!');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Allow Enter key to generate
+        document.getElementById('wordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') generateLoop();
+        });
+        document.getElementById('loopCount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') generateLoop();
+        });
+    </script>
+
+</body>
+</html>
